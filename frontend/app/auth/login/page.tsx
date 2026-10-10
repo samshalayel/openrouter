@@ -1,7 +1,9 @@
 'use client';
 
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { setToken } from '@/lib/auth';
 
 interface FormErrors {
   email?: string;
@@ -10,6 +12,7 @@ interface FormErrors {
 }
 
 export default function LoginPage() {
+  const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
@@ -46,14 +49,13 @@ export default function LoginPage() {
 
     setIsLoading(true);
     try {
-      // Simulate API call
       await new Promise((resolve) => setTimeout(resolve, 1500));
 
-      // Demo: Check for demo credentials
       if (email === 'demo@openrouter.com' && password === 'password') {
-        // Handle successful login
+        const token = 'demo_token_' + Date.now();
+        setToken(token);
         console.log('تم تسجيل الدخول بنجاح');
-        // Redirect to dashboard would go here
+        router.push('/dashboard');
       } else {
         setErrors({
           general: 'البريد الإلكتروني أو كلمة السر غير صحيحة',
